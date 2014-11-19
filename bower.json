@@ -17,6 +17,11 @@
     "Steven Weaver (sweaver@ucsd.edu)",
     "Kemal Eren (keren@eng.ucsd.edu)"
   ],
+  "dependencies": {
+    "jquery" : ">=1.9",
+    "bootstrap" : ">=3.0.0",
+    "fontawesome": ">=4.0.3" 
+  },
   "license": "MIT",
   "homepage": "http://github.com/veg/veg-hiv-env",
   "ignore": [
