@@ -1,0 +1,29 @@
+{
+  "name": "veg-hiv-env",
+  "version": "0.1.0",
+  "description": "A web app to display and interact with within-host longtitudinal HIV-1 env sequences based on JSONs generated offline",
+  "main": [ "js/veg-hiv-env.js",
+            "css/veg-hiv-env.css",
+            "html/veg-hiv-env.html"],
+  "keywords": [
+    "HIV",
+    "bioinformatics",
+    "evolution",
+    "antibody"
+  ],
+  "authors": [
+    "Sergei Pond (spond@ucsd.edu)",
+    "Ben Murrell (murrellb@gmail.com)",
+    "Steven Weaver (sweaver@ucsd.edu)",
+    "Kemal Eren (keren@eng.ucsd.edu)"
+  ],
+  "license": "MIT",
+  "homepage": "http://github.com/veg/veg-hiv-env",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
