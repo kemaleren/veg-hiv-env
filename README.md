@@ -7,5 +7,5 @@ To begin using do the following.
 Then open `test.html` in a browser.
 
 You need to have the [bower](http://bower.io) pacakege manager installed (which itself needs `npm`).
-For documentation and data file format explanations please see the wiki
+For documentation and data file format explanations please see the [../wiki]
   
