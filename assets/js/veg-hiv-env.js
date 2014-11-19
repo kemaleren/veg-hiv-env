@@ -408,6 +408,8 @@ function _multiselect_button_label (options, min_required, max_allowed, limit, r
 // loaders
 
 function load_a_directory (name, dir, use_copy_numbers) {
+    $('title').text (name + " intrahost evolution");
+
     if (use_copy_numbers) {
         do_copy_number = true;
     }
