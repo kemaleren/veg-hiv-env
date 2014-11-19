@@ -62,7 +62,7 @@ for (var i = 0; i < residues.length; i++) {
 _pos_sites_color_map ['ins'] = d3.rgb (128,128,128);
 _pos_sites_color_map ['del'] = d3.rgb (128,128,128);
 
-var _db_frequency_data_URL    = "/data/freqs.json";
+var _db_frequency_data_URL    = "assets/data/lanl-freqs.json";
 var _db_frequency_information = null;
 var _db_available_subtypes    = [];
 var _toggle_evo_plot_checkers = 0;

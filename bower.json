@@ -2,9 +2,9 @@
   "name": "veg-hiv-env",
   "version": "0.1.0",
   "description": "A web app to display and interact with within-host longtitudinal HIV-1 env sequences based on JSONs generated offline",
-  "main": [ "js/veg-hiv-env.js",
-            "css/veg-hiv-env.css",
-            "html/veg-hiv-env.html"],
+  "main": [ "assets/js/veg-hiv-env.js",
+            "assets/css/veg-hiv-env.css",
+            "assets/html/veg-hiv-env.html"],
   "keywords": [
     "HIV",
     "bioinformatics",
@@ -20,7 +20,10 @@
   "dependencies": {
     "jquery" : ">=1.9",
     "bootstrap" : ">=3.0.0",
-    "fontawesome": ">=4.0.3" 
+    "fontawesome": ">=4.0.3",
+    "d3" : ">=3.4",
+    "phylotree": "git@github.com:veg/phylotree.js.git#v0.1.0",
+    "bootstrap-multiselect" : "git@github.com:davidstutz/bootstrap-multiselect.git#v0.9.10"
   },
   "license": "MIT",
   "homepage": "http://github.com/veg/veg-hiv-env",

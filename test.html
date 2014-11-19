@@ -3,28 +3,26 @@
 
 <head>
     <meta charset="utf-8">
-    <!-- Latest compiled and minified CSS -->
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    
+    <!-- JS includes -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/d3/d3.min.js"></script>
+    <script src="bower_components/phylotree/phylotree.js"></script>
+    <script src="bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+    
+    <script src="assets/js/veg-hiv-env.js"></script>
+    
+    
+    <!-- CSS includes -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" type="text/css">
+    <link rel="stylesheet" href="bower_components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/phylotree/phylotree.css" type="text/css"/>
+    
+    <link rel="stylesheet" href="assets/css/veg-hiv-env.css">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
-    <link href="/css/phylotree.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="/css/bootstrap-multiselect.css" type="text/css"/>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-
-    <script src="http://octamonkey.ucsd.edu/js/d3.min.js"></script>
-    <link rel="stylesheet" href="/css/nab_evolution.css">
-    <script src="/js/nab_evolution.js"></script>
-    <script src="/js/bootstrap-multiselect.js"></script>
-    <script src="/js/phylotree.js"></script>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-
-    <link rel="import" href="/path/to/imports/stuff.html">
 
     <title></title>
 
@@ -32,14 +30,18 @@
 
 <script>
 
-
-
 $(document).ready (function () {
-    load_a_directory ("pt064", "/pub/nab_evolution/pt064/data/", false);
+
+    $.get ("assets/html/veg-hiv-env.html", 
+            function (data) {
+                $('body').append (data);
+                load_a_directory ("Patient 064", "test-data/", false);
+           });
+    
 });
 
 </script>
 
 <!--#include virtual="/ssi/nab_evolution.ssi" -->
-
+<body></body>
 </html>
