@@ -4,8 +4,8 @@ To begin using do the following.
   cd veg-hiv-env
   bower install
 ```  
-Then open `test.html` in a browser.
+Then open `test.html` in a browser. Note that this may not work in some browsers, e.g. Chrome because of how it implements the same origin policy for file:/// URLS; in this case put the directory in somewhere that can be accessed by HTTP.
 
-You need to have the [bower](http://bower.io) pacakege manager installed (which itself needs `npm`).
+You need to have the [bower](http://bower.io) package manager installed (which itself needs `npm`).
 For documentation and data file format explanations please see the wiki
   
