@@ -1556,27 +1556,28 @@ function plot_site_data (site_range, dim, id) {
         .attr("height", (dim[1])*_max_sites_to_plot + margin.top + margin.bottom);
 
     svg.selectAll("path").remove();
-    svg.selectAll("g").remove();    
+    svg.selectAll("g").remove();
 
     frequency_data   = [];
-    
+
     var sites_plotted = 0;
     var all_residues = {};
 
     for (site_id = Math.ceil(site_range[0]); site_id <= Math.floor(site_range[1]) && sites_plotted < _max_sites_to_plot; site_id++) {
         if (site_id in _pos_sites) {
-            var stack_data   = [];
-    
+            var count_data   = [];
+
             my_residues = get_site_residues (_pos_sites, site_id);
 
             for (var r in my_residues) {
-                stack_data.push ({'residue' : my_residues[r], 'values' : []});
+                count_data.push ({'residue' : my_residues[r], 'values' : []});
                 all_residues [my_residues[r]] = 1;
             }
-        
+
             var dates = [];
             var sums  = [];
-        
+            var date_to_sum = {};
+
             for (var k in _pos_sites[site_id]) {
                 if (k != 'HXB2') {
                     var md = parse_date.parse(k);
@@ -1585,44 +1586,71 @@ function plot_site_data (site_range, dim, id) {
                     for (var r in my_residues) {
                         if (my_residues[r] in _pos_sites[site_id][k]) {
                             var count = _pos_sites[site_id][k][my_residues[r]];
-                            stack_data[r]['values'].push ({'x' : md, 'y' : count});
-                            sum += count;           
+                            count_data[r]['values'].push ({'x' : md, 'y' : count});
+                            sum += count;
                         } else {
-                            stack_data[r]['values'].push ({'x' : md, 'y' : 0});
+                            count_data[r]['values'].push ({'x' : md, 'y' : 0});
                         }
                     }
                     sums.push (sum);
                     dates.push (md);
+                    date_to_sum[md] = sum;
                 }
-            }        
-    
+            }
+
+            // normalize within each date
+            for (var r in count_data) {
+                for (var i=0; i<count_data[r]['values'].length; ++i) {
+                    var xval = count_data[r]['values'][i]['x'];
+                    var yval = count_data[r]['values'][i]['y'];
+                    if (date_to_sum[xval] > 0) {
+                        count_data[r]['values'][i]['y'] = yval / date_to_sum[xval];
+                    }
+                }
+            }
+
+            // flatten data for plotting
+            var dot_data = []
+            for (var r in count_data) {
+                for (var i=0; i<count_data[r]['values'].length; ++i) {
+                    var xval = count_data[r]['values'][i]['x'];
+                    var yval = count_data[r]['values'][i]['y'];
+                    dot_data.push({'residue' : count_data[r]['residue'], 'x' : xval, 'y' : yval});
+                }
+            }
+
             x.domain (d3.extent (dates));
             xAxis.tickValues (dates).tickFormat (show_date_axis);
-            y.domain ([0,d3.max (sums)]);
-    
-    
-            var stack = d3.layout.stack()
-            .values(function(d) { return d.values; });
-     
-            var area = d3.svg.area()
-            .x(function(d) { return x(d.x); })
-            .y0(function(d) { return y(d.y0); })
-            .y1(function(d) { return y(d.y0 + d.y); })
-            .interpolate ('monotone');      
-    
-    
-            var plot_svg = svg.append("g")
-            .attr("transform", "translate(" + margin.left + "," + (margin.top + dim[1] * sites_plotted)  + ")");
+            y.domain([0, 1]);
 
-            
-            plot_svg.selectAll("path")
-                .data(stack(stack_data))
+            var plot_svg = svg.append("g")
+                .attr("transform", "translate(" + margin.left + "," + (margin.top + dim[1] * sites_plotted)  + ")");
+
+            // draw dots
+            dots = plot_svg.selectAll(".dot")
+                .data(dot_data)
+                .enter().append("circle")
+                .attr("class", "dot")
+                .attr("r", 3.5)
+                .attr("cx", function(d) { return x(d.x); })
+                .attr("cy", function(d) { return y(d.y); })
+                .style("fill", function(d) { return _pos_sites_color_map[d.residue]; })
+                .append("title").text (function (d) {return d.residue});
+
+            // draw lines
+            var lineFunc = d3.svg.line()
+                .x(function(d) { return x(d.x); })
+                .y(function(d) { return y(d.y); })
+                .interpolate('linear');
+
+          plot_svg.selectAll("path")
+                .data(count_data)
                 .enter().append("path")
-                .attr("class", "area")
-                .style("fill", function (d) { return _pos_sites_color_map[d.residue]; })
-                .attr("d", function(d) {  return area(d.values); })
+                .style("stroke", function (d) { return _pos_sites_color_map[d.residue]; })
+                .style("fill", "none")
+                .attr("d", function(d) {  return lineFunc(d.values); })
                 .append ("title").text (function (d) {return d.residue});
-            
+
             plot_svg.append ("text")
               .attr("transform", "translate(" + width + "," + height + ")")
               .attr("dy", "-.4em")
