@@ -1529,6 +1529,8 @@ function plot_site_conservation (site_range, dim, id, subtype) {
 
 
 function plot_site_data (site_range, dim, id) {
+    var normalize = false;
+    var draw_stack = false;
 
     _max_sites_to_plot = parseInt($( "#_pos_sites_to_show" ).val());
     
@@ -1598,18 +1600,19 @@ function plot_site_data (site_range, dim, id) {
                 }
             }
 
-            // normalize within each date
-            for (var r in count_data) {
-                for (var i=0; i<count_data[r]['values'].length; ++i) {
-                    var xval = count_data[r]['values'][i]['x'];
-                    var yval = count_data[r]['values'][i]['y'];
-                    if (date_to_sum[xval] > 0) {
-                        count_data[r]['values'][i]['y'] = yval / date_to_sum[xval];
+            if (normalize) {
+                for (var r in count_data) {
+                    for (var i=0; i<count_data[r]['values'].length; ++i) {
+                        var xval = count_data[r]['values'][i]['x'];
+                        var yval = count_data[r]['values'][i]['y'];
+                        if (date_to_sum[xval] > 0) {
+                            count_data[r]['values'][i]['y'] = yval / date_to_sum[xval];
+                        }
                     }
                 }
             }
 
-            // flatten data for plotting
+            // flatten data for d3.max() and plotting
             var dot_data = []
             for (var r in count_data) {
                 for (var i=0; i<count_data[r]['values'].length; ++i) {
@@ -1619,37 +1622,53 @@ function plot_site_data (site_range, dim, id) {
                 }
             }
 
+
             x.domain (d3.extent (dates));
             xAxis.tickValues (dates).tickFormat (show_date_axis);
-            y.domain([0, 1]);
+            y.domain([0, d3.max(dot_data, function(d) {return d.y;})])
 
             var plot_svg = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + (margin.top + dim[1] * sites_plotted)  + ")");
 
-            // draw dots
-            dots = plot_svg.selectAll(".dot")
-                .data(dot_data)
-                .enter().append("circle")
-                .attr("class", "dot")
-                .attr("r", 3.5)
-                .attr("cx", function(d) { return x(d.x); })
-                .attr("cy", function(d) { return y(d.y); })
-                .style("fill", function(d) { return _pos_sites_color_map[d.residue]; })
-                .append("title").text (function (d) {return d.residue});
-
-            // draw lines
-            var lineFunc = d3.svg.line()
-                .x(function(d) { return x(d.x); })
-                .y(function(d) { return y(d.y); })
-                .interpolate('linear');
-
-          plot_svg.selectAll("path")
-                .data(count_data)
-                .enter().append("path")
-                .style("stroke", function (d) { return _pos_sites_color_map[d.residue]; })
-                .style("fill", "none")
-                .attr("d", function(d) {  return lineFunc(d.values); })
-                .append ("title").text (function (d) {return d.residue});
+            if (draw_stack) {
+                var stack = d3.layout.stack()
+                    .values(function(d) { return d.values; });
+                var area = d3.svg.area()
+                    .x(function(d) { return x(d.x); })
+                    .y0(function(d) { return y(d.y0); })
+                    .y1(function(d) { return y(d.y0 + d.y); })
+                    .interpolate ('monotone');
+                plot_svg.selectAll("path")
+                    .data(stack(count_data))
+                    .enter().append("path")
+                    .attr("class", "area")
+                    .style("fill", function (d) { return _pos_sites_color_map[d.residue]; })
+                    .attr("d", function(d) {  return area(d.values); })
+                    .append ("title").text (function (d) {return d.residue})
+            } else {
+                // draw dots
+                plot_svg.selectAll(".dot")
+                    .data(dot_data)
+                    .enter().append("circle")
+                    .attr("class", "dot")
+                    .attr("r", 3.5)
+                    .attr("cx", function(d) { return x(d.x); })
+                    .attr("cy", function(d) { return y(d.y); })
+                    .style("fill", function(d) { return _pos_sites_color_map[d.residue]; })
+                    .append("title").text (function (d) {return d.residue});
+                // draw lines
+                var lineFunc = d3.svg.line()
+                    .x(function(d) { return x(d.x); })
+                    .y(function(d) { return y(d.y); })
+                    .interpolate('linear');
+                plot_svg.selectAll("path")
+                    .data(count_data)
+                    .enter().append("path")
+                    .style("stroke", function (d) { return _pos_sites_color_map[d.residue]; })
+                    .style("fill", "none")
+                    .attr("d", function(d) {  return lineFunc(d.values); })
+                    .append ("title").text (function (d) {return d.residue});
+            }
 
             plot_svg.append ("text")
               .attr("transform", "translate(" + width + "," + height + ")")
