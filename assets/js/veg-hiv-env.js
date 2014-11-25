@@ -138,11 +138,22 @@ function set_handlers () {
         draw_positional_data ();
     });
 
-    $('body').on('change', '#_site_subtype_for_conservation', function (event) {
+    $('body').on('change', "#_normalize_site_plot", function (event) {
         event.stopPropagation(); // prevent default bootstrap behavior
-        site_id = $(this).data ('site');
+        site_id = $("#_site_plot_div").data('site')
+        plot_site_data ([site_id,site_id], [270,200], "_seq_secondary_plot")
+    });
+
+    $('body').on('change', "#_stack_site_plot", function (event) {
+        event.stopPropagation(); // prevent default bootstrap behavior
+        site_id = $("#_site_plot_div").data('site')
+        plot_site_data ([site_id,site_id], [270,200], "_seq_secondary_plot")
+    });
+
+    $('body').on('change', "#_site_subtype_for_conservation", function (event) {
+        event.stopPropagation(); // prevent default bootstrap behavior
+        site_id = $("#_site_plot_div").data('site')
         plot_site_conservation ([site_id,site_id], [270,300], "_seq_tertiary_plot", $(this).val())
-        
     });
     
     $('#_seq_select_all').on('click', function (event) {
@@ -152,8 +163,6 @@ function set_handlers () {
         }
         );      
     });
-    
-        
 
     
     $('#_tree_show_clone_names').on('change', function (event) {
@@ -1100,15 +1109,13 @@ function draw_sequence_data (span, id, visible_clone_list) {
     $('._seq_hover_seq').mouseenter(function (event) {
         event.stopPropagation();
         site_id = parseInt($(this).data ('coord'));
+        $("#_site_plot_div").show();
+        $("#_site_plot_div").data ('site', site_id);
         plot_site_data ([site_id,site_id], [270,200], "_seq_secondary_plot");
-        $("#_site_subtype_for_conservation").data ('site', site_id);
-        $("#_site_subtype_conservation_div").show();
-    
         plot_site_conservation ([site_id,site_id], [270,300], "_seq_tertiary_plot", $("#_site_subtype_for_conservation").val());
-        
     });        
-    var seq_table = d3.select ('#' + id[0]);
 
+    var seq_table = d3.select ('#' + id[0]);
     
     seq_table.selectAll ('tr').remove();
     seq_table.selectAll ('tr').data (sorted_sequences_by_date).enter()
@@ -1529,8 +1536,8 @@ function plot_site_conservation (site_range, dim, id, subtype) {
 
 
 function plot_site_data (site_range, dim, id) {
-    var normalize = false;
-    var draw_stack = false;
+    var normalize = $( '#_normalize_site_plot').prop("checked")
+    var stack_plot = $( '#_stack_site_plot').prop("checked")
 
     _max_sites_to_plot = parseInt($( "#_pos_sites_to_show" ).val());
     
@@ -1630,7 +1637,7 @@ function plot_site_data (site_range, dim, id) {
             var plot_svg = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + (margin.top + dim[1] * sites_plotted)  + ")");
 
-            if (draw_stack) {
+            if (stack_plot) {
                 var stack = d3.layout.stack()
                     .values(function(d) { return d.values; });
                 var area = d3.svg.area()

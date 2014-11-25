@@ -258,44 +258,58 @@
                                 </tr>
                             </thead>
                             <tbody id = '_seq_positional_table'>
-                    
+
                                 </tbody>
                             </table>
                         </div>
-                        
-                        <div class = "col-md-3">
-                            <div class = 'row'>
-                                <svg id = '_seq_secondary_plot'/>
-                            </div>
-                            <div class = 'row' id = '_site_subtype_conservation_div' style = 'display: none'>
-                                <div class = 'row '>
-                                      <div class = 'col-md-3'>
-                                          <div class="form-inline">
-                                              <div class="form-group">
-                                                <label>
-                                                    Subtype
-                                                </label>
-                                              </div>
 
-                                              <div class="form-group">
-                                                 <select id = '_site_subtype_for_conservation'></select>
-                                              </div>           
-                                          </div>
-                                       </div>                                               
+                        <div class = "col-md-3" id='_site_plot_div' style = 'display: none'>
+                          <div class = 'row'>
+                            <div class = 'row '>
+                              <div class = 'col-md-3'>
+                                <div class="checkbox">
+                                  <label>
+                                    <input type="checkbox" id = '_normalize_site_plot' checked /> normalize
+                                  </label>
+                                  <label>
+                                    <input type="checkbox" id = '_stack_site_plot' /> stack
+                                  </label>
                                 </div>
-                                <div class = 'row'>
-                                    <svg id = '_seq_tertiary_plot'/>
-                                </div>
+                              </div>
                             </div>
+                            <div class = 'row'>
+                              <svg id = '_seq_secondary_plot'/>
+                            </div>
+                          </div>
+                          <div class = 'row'>
+                            <div class = 'row '>
+                              <div class = 'col-md-3'>
+                                <div class="form-inline">
+                                  <div class="form-group">
+                                    <label>
+                                      Subtype
+                                    </label>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <select id = '_site_subtype_for_conservation'></select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class = 'row'>
+                              <svg id = '_seq_tertiary_plot'/>
+                            </div>
+                          </div>
                         </div>
                     </div>
                     </div>
-                </div>    
-            </div>       
+                </div>
+            </div>
           </div>
         </div>
 
- 
+
          <div class="tab-pane fade" id="trees">
  			<div class = "row">
                 <div class = "col-md-12">
