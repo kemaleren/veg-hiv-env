@@ -46,7 +46,7 @@ var popover_obj = null;
 var stored_clones = null;
 var popover_feat_obj = null;
 var stored_features = null;
-var do_copy_number = false;
+var do_copy_number = true;
 var date_annotations = null;
 
 var _pos_sites_colors      = d3.scale.category10();
