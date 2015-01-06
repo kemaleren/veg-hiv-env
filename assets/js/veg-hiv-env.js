@@ -605,7 +605,13 @@ function load_a_directory (name, dir, use_copy_numbers) {
                 _tree_widget.node_span ('equal');
                 
                 if (do_copy_number) {
-                     _tree_widget.node_span (function (a) { var m = copy_re.exec (a.name); try {return Math.sqrt(parseFloat (m[1]))} catch (e) {} return null;});
+                     _tree_widget.node_span (function (a) {
+                       var m = copy_re.exec (a.name);
+                       try {
+                           var copynum = Math.sqrt(parseFloat (m[1]));
+                           return copynum;
+                       } catch (e) {}
+                       return null;});
                     _tree_widget.options ({'draw-size-bubbles' : true}, false);               
                 } else {
                     _tree_widget.options ({'draw-size-bubbles' : false}, false);
