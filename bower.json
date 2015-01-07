@@ -22,7 +22,7 @@
     "bootstrap" : ">=3.0.0",
     "fontawesome": ">=4.0.3",
     "d3" : ">=3.4",
-    "phylotree": "git@github.com:veg/phylotree.js.git#v0.1.0",
+    "phylotree": "git@github.com:kemaleren/phylotree.js.git#node_scaling",
     "bootstrap-multiselect" : "git@github.com:davidstutz/bootstrap-multiselect.git#v0.9.10"
   },
   "license": "MIT",
