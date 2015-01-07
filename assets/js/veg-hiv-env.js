@@ -192,7 +192,7 @@ function set_handlers () {
     	$("#_tree_scale_point_selector").trigger ("change");
     });
 
-	$('#_tree_scale_point_selector').on('change', function (event)  {
+    $('#_tree_scale_point_selector').on('change', function (event)  {
     	var region = $("#_tree_regions_selector").val();
     	var scale = $(this).val();
     	var date = $("#_tree_time_point_selector").val();
@@ -201,7 +201,11 @@ function set_handlers () {
     	    _tree_widget (tree_str).svg (_tree_svg).layout();
     	    map_evolution_onto_tree ();
     	}
-	});
+        // default to deepest nodes on top; since other selectors
+        // trigger this one, this should always be true for a new
+        // tree.
+        sort_nodes (true);
+    });
 
     $('body').on('click', '._seq_predef', function (event) {
         event.stopPropagation(); // prevent default bootstrap behavior
@@ -628,6 +632,7 @@ function load_a_directory (name, dir, use_copy_numbers) {
         
             populateSelectWithValues ("_tree_regions_selector", d3.keys (_tree_strings).sort());
             $("#_tree_regions_selector").val("gp160").trigger ("change");
+
         }
         );
 
