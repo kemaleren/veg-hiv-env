@@ -180,8 +180,16 @@ function set_handlers () {
     	
     	var option_values   = d3.keys (_tree_strings[region]).sort(),
     	    option_text = option_values.map (function (d) {var dp = parse_date.parse(d); if (dp) {return show_date (dp);} return d;});
-    	
-    	populateSelectWithValues ("_tree_time_point_selector", option_text, false, option_values);
+
+        // if 'Combined' is an option, put it first.
+        var move = function(arr, from, to) {
+            arr.splice(to, 0, arr.splice(from, 1)[0]);
+        };
+        var combined_index = option_text.indexOf('Combined');
+        move(option_text, combined_index, 0);
+        move(option_values, combined_index, 0);
+
+        populateSelectWithValues ("_tree_time_point_selector", option_text, false, option_values);
     	$("#_tree_time_point_selector").trigger ("change");
     });
 
